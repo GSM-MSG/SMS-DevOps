@@ -33,7 +33,9 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
         
     - name : Move Paths
-      run : cd terraform
+      run : |
+          cd terraform
+          ls
       
     - name : Create provider.tf
       run : |
