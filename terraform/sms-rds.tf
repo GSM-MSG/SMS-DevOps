@@ -1,3 +1,15 @@
+## VAR
+variable "db_password" {
+    description = "ia-rds root user password"
+    type = string
+}
+
+variable "user_name" {
+    type = string
+}
+
+
+
 ## DB Subnet Group setting
 resource "aws_db_subnet_group" "sms-subnet-group" {
     name = "sms-subnet-group"
