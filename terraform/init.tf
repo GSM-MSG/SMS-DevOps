@@ -4,22 +4,11 @@ terraform {
         key = "terraform/terraform.tfstate"
         region = "ap-northeast-2"
         encrypt = true
-        dynamodb_table = "terrafomr-lock"
+        dynamodb_table = "terraform-lock"
     }
 }
 
 provider "aws" {
     region = "ap-northeast-2" 
     version = "~> 2.49.0" 
-}
-
-resource "aws_dynamodb_table" "terraform_state_lock" {
-    name = "terraform-lock"
-    hash_key = "LockID"
-    billing_mode = "PAY_PER_REQUEST"
-
-    attrbute {
-        name = "LockID"
-        type = "S"
-    }
 }
