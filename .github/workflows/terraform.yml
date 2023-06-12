@@ -32,12 +32,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
       
-    - name : Create provider.tf
-      run : |
-        touch terraform/provider.tf
-        echo  "${{ secrets.TERRAFORM_PROVIDER }}" > terraform/provider.tf
-      shell: bash
-      
     - name: Terraform Init
       run: |
         cd terraform
@@ -54,6 +48,7 @@ jobs:
         terraform plan -input=false
 
     - name: Terraform Apply
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: |
         cd terraform
         terraform apply
