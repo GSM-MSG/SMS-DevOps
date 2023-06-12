@@ -3,7 +3,7 @@
 resource "aws_instance" "sms-bastion" {
     ami = "ami-04cebc8d6c4f297a3"
     instance_type =  "t2.nano"
-    subnet_id = "${aws_subnet.ia-public-subnet-2a.id}"
+    subnet_id = "${aws_subnet.sms-public-subnet-2a.id}"
     vpc_security_group_ids = [aws_security_group.sms-bastion-sg.id]
     key_name = "sms_key"
 
