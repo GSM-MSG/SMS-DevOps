@@ -52,6 +52,5 @@ resource "aws_db_instance" "sms-backend-database" {
     identifier = "sms-mysql"
     username = var.user_name
     password = var.db_password
-    name = "smsDatabase"
     port = "3306"
 }
