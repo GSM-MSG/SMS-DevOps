@@ -1,10 +1,9 @@
 # terraform.yaml
 name: sms-devops-trraform-pipeline
 on:
-    push:
-      paths:
-        - "terraform/**"  
-      branches: [main]
+  push:
+    branches: [ "main" ]
+
 
 env:
   AWS_REGION: ap-northeast-2
@@ -38,8 +37,8 @@ jobs:
       
     - name : Create provider.tf
       run : |
-        touch ./terraform/provider.tf
-        echo  "${{ secrets.TERRAFORM_PROVIDER }}" > ./terraform/provider.tf
+        touch terraform/provider.tf
+        echo  "${{ secrets.TERRAFORM_PROVIDER }}" > terraform/provider.tf
       shell: bash
       
     - name: Terraform Init

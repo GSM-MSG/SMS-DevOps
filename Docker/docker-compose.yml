@@ -17,4 +17,4 @@ services:
       volumes:
       - .:/app
       depends_on:
-      - redis_container_1
+      - redis_container_1 
