@@ -3,7 +3,7 @@ name: sms-devops-trraform-pipeline
 on:
     push:
       paths:
-        - "./terraform/"  
+        - "./terraform/*"  
       branches: [main]
 
 env:
