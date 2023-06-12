@@ -5,7 +5,7 @@ resource "aws_instance" "sms-bastion" {
     instance_type =  "t2.nano"
     subnet_id = "${aws_subnet.sms-public-subnet-2a.id}"
     vpc_security_group_ids = [aws_security_group.sms-bastion-sg.id]
-    key_name = "sms_key"
+    key_name = "sms-key"
 
     tags = {
         Name = "sms-bastion"
@@ -17,8 +17,8 @@ resource "aws_instance" "sms-main-server" {
     instance_type = "t3.medium"
     subnet_id = "${aws_subnet.sms-private-subnet-2a.id}"
     vpc_security_group_ids = [aws_security_group.sms-main-server-sg.id]
-    key_name = "sms_key"
-    associate_public_ip_address = true
+    key_name = "sms-key"
+    associate_public_ip_address = false
     source_dest_check = false
 
     tags = {
