@@ -1,6 +1,6 @@
 terraform {
     backend "s3" {
-        bucket = "devops-tf-1124sd25"
+        bucket = "sms-tf-provider-s3-175662"
         key = "terraform/terraform.tfstate"
         region = "ap-northeast-2"
         encrypt = true
@@ -11,14 +11,6 @@ terraform {
 provider "aws" {
     region = "ap-northeast-2" 
     version = "~> 2.49.0" 
-}
-
-resource "aws_s3_bucket" "devops-terraform-archive" {
-    bucket = "devops-tf-1124sd25"
-
-    versioning {
-        enabled = true
-    }
 }
 
 resource "aws_dynamodb_table" "terraform_state_lock" {
