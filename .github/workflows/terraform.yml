@@ -1,8 +1,10 @@
 # terraform.yaml
 name: sms-devops-trraform-pipeline
 on:
-  push:
-    branches: [ "main" ]
+    push:
+      paths:
+        - "terraform/**"  
+      branches: [main]
 
 
 env:
@@ -56,3 +58,19 @@ jobs:
         export TF_VAR_code_pipeline_bucekt="${{ env.code_pipeline_bucekt }}"
         export TF_VAR_user_name="${{ env.user_name }}"
         terraform apply -auto-approve
+
+    - name: SMS terraform CI Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: ${{ success() }}
+      with:
+        title:  💟 Terraform apply Success 💟
+        webhook: ${{ secrets.SMS_DISCORD_WEBHOOK }}
+        color: 00FF00
+
+    - name: SMS terraform CI Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: ${{ failure() }}
+      with:
+        title: ❗️ Terraform apply Failure ❗️
+        webhook: ${{ secrets.SMS_DISCORD_WEBHOOK }}
+        color: FF0000
