@@ -1,6 +1,7 @@
 import time
 from dotenv import load_dotenv
 import os
+import requests
 
 import re
 from bs4 import BeautifulSoup
@@ -41,17 +42,26 @@ time.sleep(1)
 
 browser.find_element(By.ID, 'kt_login_signin_submit').click()
 time.sleep(3)
-print(browser.page_source)
+
 wait = WebDriverWait(browser, 20)
 wait.until(EC.text_to_be_present_in_element((By.CLASS_NAME, 'kt-widget16__items'), '$'))
 soup = BeautifulSoup(browser.page_source, 'html.parser')
 
-price_dashboard_dict = {}
+cost_dashboard_dict = {}
 for aws, price in zip(soup.find_all('span', 'kt-widget16__date'), soup.find_all('span', 'kt-widget16__price')):
-    price_dashboard_dict.update({re.sub('\s', '', aws.get_text()): re.sub('\s', '', price.get_text())})
+    cost_dashboard_dict.update({re.sub('\s', '', aws.get_text()): re.sub('\s', '', price.get_text())})
 
 browser.quit()
 
 discord_url = os.environ.get('discord_webhook_url')
 discord_webhook = Discord(url=discord_url)
-discord_webhook.post(content=f'{price_dashboard_dict.items()}')
+source_cost_data = list(cost_dashboard_dict.items())
+total_cost = sum([float(i[1][1:]) for i in source_cost_data])
+
+content = f'환율 : ' \
+          f'현재 aws 총 비용: ${round(total_cost, 2)}\n' \
+          f'각 서비스 별 비용:'
+for service, cost in source_cost_data:
+    content += f'\n\t{service}: {cost}'
+
+discord_webhook.post(content=content)
