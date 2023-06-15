@@ -62,9 +62,10 @@ KRW_url = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD
 exchange = requests.get(KRW_url, headers=user_agent).json()
 exchange_rate = exchange[0]['basePrice']
 
-content = f'## 현재 달러 환율 : $1 : ₩{exchange_rate}\n' \
-          f'## 현재 aws 총 비용: ${round(total_cost, 2)} ₩{round(exchange_rate*total_cost, 2)} \n' \
-          f'## 각 서비스 별 비용:'
+content = \
+    f'## 현재 달러 환율 : $1 : ₩{exchange_rate}\n' \
+    f'## 현재 aws 총 비용: ${round(total_cost, 2)} ₩{round(exchange_rate*total_cost, 2)} \n' \
+    f'## 각 서비스 별 비용:'
 for service, cost in source_cost_data:
     content += f'\n\t{service}: {cost}'
 
