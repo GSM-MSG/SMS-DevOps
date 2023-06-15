@@ -20,10 +20,10 @@ login_data = {
     'Id': os.environ.get('username'),
     'password': os.environ.get('pwd')
 }
-
+user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
 chrome_option = webdriver.ChromeOptions()
 chrome_option.add_argument('headless')
-chrome_option.add_argument('--user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36')
+chrome_option.add_argument(f'--user-agent={user_agent["User-Agent"]}')
 chrome_option.add_argument('--disable-gpu')
 chrome_option.add_argument('--lang=ko_KR')
 chrome_option.add_argument("--window-size=1920,1080")
@@ -43,7 +43,7 @@ time.sleep(1)
 browser.find_element(By.ID, 'kt_login_signin_submit').click()
 time.sleep(3)
 
-wait = WebDriverWait(browser, 20)
+wait = WebDriverWait(browser, 40)
 wait.until(EC.text_to_be_present_in_element((By.CLASS_NAME, 'kt-widget16__items'), '$'))
 soup = BeautifulSoup(browser.page_source, 'html.parser')
 
@@ -58,9 +58,13 @@ discord_webhook = Discord(url=discord_url)
 source_cost_data = list(cost_dashboard_dict.items())
 total_cost = sum([float(i[1][1:]) for i in source_cost_data])
 
-content = f'환율 : ' \
-          f'현재 aws 총 비용: ${round(total_cost, 2)}\n' \
-          f'각 서비스 별 비용:'
+KRW_url = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD'
+exchange = requests.get(KRW_url, headers=user_agent).json()
+exchange_rate = exchange[0]['basePrice']
+
+content = f'## 현재 달러 환율 : $1 : ₩{exchange_rate}\n' \
+          f'## 현재 aws 총 비용: ${round(total_cost, 2)} ₩{round(exchange_rate*total_cost, 2)} \n' \
+          f'## 각 서비스 별 비용:'
 for service, cost in source_cost_data:
     content += f'\n\t{service}: {cost}'
 
