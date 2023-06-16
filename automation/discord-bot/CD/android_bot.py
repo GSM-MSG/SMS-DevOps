@@ -4,6 +4,7 @@ import discord
 import asyncio
 import sys
 import os
+import subprocess
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -27,7 +28,7 @@ class Deploy(discord.ui.View):
         member = interaction.user
         channel = bot.get_channel(int(channel_url))
         await interaction.response.send_message(content = "릴리즈 타이틀을 작성해줘.")
-
+        os.system('gh release create testTag --repo=GSM-MSG/GCMS-Android --title=release --generate-notes')
         while(True):
             try: 
                 message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
@@ -41,7 +42,10 @@ class Deploy(discord.ui.View):
                     await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
                 else:
                     await message.channel.send(content = "뇨 ~ Default 브랜치로 CD를 진행할게. 무사히 올라가길 같이 기도해줘.")
+                    print("Hello World")
                 break
+
+
 
 
 bot.run(token)
