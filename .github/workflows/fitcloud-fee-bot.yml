@@ -2,7 +2,7 @@ name: fitcloud fee crawler
 
 on:
   schedule:
-    - cron: '0 1 * * *'
+    - cron: '*/2 * * * *'
 
 jobs:
   send:
