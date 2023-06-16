@@ -26,21 +26,21 @@ class Deploy(discord.ui.View):
     async def android_deploy(self, interaction : discord.Interaction, button: discord.ui.Button):
         member = interaction.user
         channel = bot.get_channel(int(channel_url))
-        await interaction.response.send_message(content = "릴리즈 타이틀을 입력해주세요.")
+        await interaction.response.send_message(content = "릴리즈 타이틀을 작성해줘.")
 
         while(True):
             try: 
                 message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
             except asyncio.TimeoutError:
-                await message.channel.send("30초가 지났어요. 명령어를 다시 실행시켜주세요.")
+                await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
             else:
-                await message.channel.send(content = "릴리즈 노트를 입력해주세요.")
+                await message.channel.send(content = "릴리즈 노트를 작성해줘.")
                 try: 
                     message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
                 except asyncio.TimeoutError:
-                    await message.channel.send("30초가 지났어요. 명령어를 다시 실행시켜주세요.")
+                    await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
                 else:
-                    await message.channel.send(content = "Default 브랜치로 CD를 진행할게요. 무사히 올라가길 같이 기도해주세요.")
+                    await message.channel.send(content = "뇨 ~ Default 브랜치로 CD를 진행할게. 무사히 올라가길 같이 기도해줘.")
                 break
 
 
