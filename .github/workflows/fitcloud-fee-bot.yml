@@ -18,7 +18,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install automation/discord-bot/fee-bot/requirements.txt
+          pip install ./automation/discord-bot/fee-bot/requirements.txt
+      - name: Create .env
+        run: |
+          touch ./automation/discord-bot/fee-bot/.env
+          echo "${{ secrets.FEE_ENV }}" > ./automation/discord-bot/fee-bot/.env
       - name: run webhook
         run: |
-          python automation/discord-bot/fee-bot/webhook-fitcloud-crawl-data.py
+          python ./automation/discord-bot/fee-bot/webhook-fitcloud-crawl-data.py
