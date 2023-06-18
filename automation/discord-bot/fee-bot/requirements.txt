@@ -1,5 +1,5 @@
 selenium==4.10.0
 discordwebhook==1.0.3
 beautifulsoup4==4.12.2
-beautifulsoup4==4.12.2
-python-dotenv==1.0.0
+discord.py==2.3.0
+
