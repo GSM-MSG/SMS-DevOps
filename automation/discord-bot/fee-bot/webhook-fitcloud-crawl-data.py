@@ -66,8 +66,7 @@ exchange_rate = exchange[0]['basePrice']
 Content = Embed(
     title='aws 요금',
     description=
-        f'## 오늘의 환율은 1$ 당 {exchange_rate}₩ 입니다.\n'
-        f'총 비용은 {total_cost:.2f}$ {total_cost*exchange_rate:.2f}₩ 이고\n'
+        f'## 총 비용은 {total_cost:.2f}$ {total_cost*exchange_rate:.2f}₩ 입니다\n'
         f'각 서비스 별 비용은 아래와 같습니다.',
     color=Color.random())
 
@@ -75,7 +74,9 @@ for service, cost in source_cost_data:
     Content.add_field(name=service, value=cost, inline=False)
 
 period = soup.find_all('span', 'kt-widget24__desc')[1].get_text()
-Content.set_footer(text=f'{period} 까지의 비용 입니다.')
+Content.set_footer(text=
+    f'{period} 까지의 비용 입니다.\n'
+    f'현재 환율을 1$당 {exchange_rate}₩ 입니다.')
 
 
 async def send_fee_data(content):
