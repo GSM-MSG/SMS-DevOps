@@ -3,7 +3,9 @@ from dotenv import load_dotenv
 import discord
 import asyncio
 import os
-
+import json
+import subprocess
+from pprint import pprint
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -16,12 +18,11 @@ async def on_ready():
     print("I'm ready")
 
 @bot.command()
-async def 배포(ctx):
+async def 뇨파(ctx):
     view = Deploy()
-    await ctx.reply("뇨~ 어떤 배포를 도와줄까?",view=view)
+    await ctx.reply("뇨~ 뭘 도와줄까?",view=view)
 
 class Deploy(discord.ui.View):
-    
     @discord.ui.button(label="안드로이드 배포", style=discord.ButtonStyle.green)
     async def android_deploy(self, interaction : discord.Interaction, button: discord.ui.Button):
         global release_tag
@@ -48,6 +49,21 @@ class Deploy(discord.ui.View):
                     os.system(f'gh release create {release_tag} --repo=GSM-MSG/SMS-Android --title={release_title} --generate-notes')
                 break
 
+    @discord.ui.button(label="백엔드 ERROR 로그보기", style=discord.ButtonStyle.red)
+    async def backend_log(self, interaction : discord.Interaction, button: discord.ui.Button):
+        log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
+        dict_log = json.loads(log_data)
+        
+        test = []
+        error_log = ''
+
+        for i in dict_log["events"]:
+            test.append(i["message"].split(" : ")[1])
+
+        for i in test[:20]:
+                error_log = error_log + i + '\n'
+
+        await interaction.response.send_message(content = error_log)
 
 
 
