@@ -55,15 +55,15 @@ class Deploy(discord.ui.View):
         dict_log = json.loads(log_data)
         
         test = []
-        stringtest = ''
+        error_log = ''
 
         for i in dict_log["events"]:
             test.append(i["message"].split(" : ")[1])
 
         for i in test[:12]:
-                stringtest = stringtest + i + '\n'
+                error_log = error_log + i + '\n'
 
-        await interaction.response.send_message(content = stringtest)
+        await interaction.response.send_message(content = error_log)
 
 
 
