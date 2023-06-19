@@ -3,7 +3,9 @@ from dotenv import load_dotenv
 import discord
 import asyncio
 import os
-
+import json
+import subprocess
+from pprint import pprint
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -49,7 +51,19 @@ class Deploy(discord.ui.View):
 
     @discord.ui.button(label="백엔드 로그보기", style=discord.ButtonStyle.blurple)
     async def backend_log(self, interaction : discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message(content = "테스트")
+        log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
+        dict_log = json.loads(log_data)
+        
+        test = []
+        stringtest = ''
+
+        for i in dict_log["events"]:
+            test.append(i["message"].split(" : ")[1])
+
+        for i in test[:12]:
+                stringtest = stringtest + i + '\n'
+
+        await interaction.response.send_message(content = stringtest)
 
 
 
