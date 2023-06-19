@@ -60,7 +60,7 @@ class Deploy(discord.ui.View):
         for i in dict_log["events"]:
             test.append(i["message"].split(" : ")[1])
 
-        for i in test[:12]:
+        for i in test[:20]:
                 error_log = error_log + i + '\n'
 
         await interaction.response.send_message(content = error_log)
