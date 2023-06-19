@@ -76,7 +76,7 @@ for service, cost in source_cost_data:
 period = soup.find_all('span', 'kt-widget24__desc')[1].get_text()
 Content.set_footer(text=
     f'{period} 까지의 비용 입니다.\n'
-    f'현재 환율을 1$당 {exchange_rate}₩ 입니다.')
+    f'현재 환율은 1$당 {exchange_rate}₩ 입니다.')
 
 
 async def send_fee_data(content):
