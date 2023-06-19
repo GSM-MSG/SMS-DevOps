@@ -49,7 +49,7 @@ class Deploy(discord.ui.View):
                     os.system(f'gh release create {release_tag} --repo=GSM-MSG/SMS-Android --title={release_title} --generate-notes')
                 break
 
-    @discord.ui.button(label="백엔드 로그보기", style=discord.ButtonStyle.blurple)
+    @discord.ui.button(label="백엔드 ERROR 로그보기", style=discord.ButtonStyle.red)
     async def backend_log(self, interaction : discord.Interaction, button: discord.ui.Button):
         log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
         dict_log = json.loads(log_data)
