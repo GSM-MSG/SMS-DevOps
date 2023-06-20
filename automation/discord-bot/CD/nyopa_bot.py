@@ -66,5 +66,4 @@ class Deploy(discord.ui.View):
         await interaction.response.send_message(content = error_log)
 
 
-
 bot.run(token)
