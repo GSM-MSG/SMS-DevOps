@@ -45,25 +45,32 @@ class Deploy(discord.ui.View):
                     await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
                 else:
                     release_tag = message.content
+                    try:
+                        subprocess.check_output(f'gh release create {release_tag} --repo=GSM-MSG/SMS-Android --title={release_title} --generate-notes'.split(" "))
+                    except subprocess.CalledProcessError as e:
+                        print(e.returncode)
+                        print(e.output)
                     await message.channel.send(content = "뇨 ~ Default 브랜치로 CD를 진행할게. 무사히 올라가길 같이 기도해줘.")
-                    os.system(f'gh release create {release_tag} --repo=GSM-MSG/SMS-Android --title={release_title} --generate-notes')
                 break
 
-    @discord.ui.button(label="백엔드 ERROR 로그보기", style=discord.ButtonStyle.red)
-    async def backend_log(self, interaction : discord.Interaction, button: discord.ui.Button):
-        log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
-        dict_log = json.loads(log_data)
+    # @discord.ui.button(label="백엔드 ERROR 로그보기", style=discord.ButtonStyle.red)
+    # async def backend_error_log(self, interaction : discord.Interaction, button: discord.ui.Button):
+    #     log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
+    #     dict_log = json.loads(log_data)
+    #     print(dict_log)
+    #     test = []
+    #     error_log = ''
+
         
-        test = []
-        error_log = ''
+    #     for i in dict_log["events"]:
+    #         test.append(i["message"].split(" : ")[1])
 
-        for i in dict_log["events"]:
-            test.append(i["message"].split(" : ")[1])
+    #     print(test)
+        
+    #     for i in test[:5]:
+    #             error_log = error_log + i + '\n'
 
-        for i in test[:20]:
-                error_log = error_log + i + '\n'
-
-        await interaction.response.send_message(content = error_log)
+    #     await interaction.response.send_message(content = error_log)
 
 
 
