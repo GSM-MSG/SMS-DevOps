@@ -23,7 +23,7 @@ async def 뇨파(ctx):
     await ctx.reply("뇨~ 뭘 도와줄까?",view=view)
 
 class Deploy(discord.ui.View):
-    @discord.ui.button(label="안드로이드 배포", style=discord.ButtonStyle.green)
+    @discord.ui.button(label="릴리즈 노트 작성", style=discord.ButtonStyle.green)
     async def android_deploy(self, interaction : discord.Interaction, button: discord.ui.Button):
         global release_tag
         global release_title
@@ -50,7 +50,7 @@ class Deploy(discord.ui.View):
                     except subprocess.CalledProcessError as e:
                         print(e.returncode)
                         print(e.output)
-                    await message.channel.send(content = "뇨 ~ Default 브랜치로 CD를 진행할게. 무사히 올라가길 같이 기도해줘.")
+                    await message.channel.send(content = "뇨 ~ 릴리즈 노트를 작성했어. 바로 pr 올리기를 통해서 배포 준비를 진행해줘!")
                 break
     
     @discord.ui.button(label="안드로이드 Merge PR 올리기", style=discord.ButtonStyle.green)
