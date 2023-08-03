@@ -67,16 +67,14 @@ class Deploy(discord.ui.View):
             except asyncio.TimeoutError:
                 await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
             else:
-                if message.content == "싫어":
-                    await message.channel.send("왜 누른거야 그럼")
-                    break
                 pr_versioncode = message.content[0]
                 pr_versionname = message.content[2:]
-
+                release_tag = (str(subprocess.check_output("gh release list --repo=GSM-MSG/SMS-Android --limit 1", shell=True, encoding='utf-8')).split("\t"))[2]
                 release_output = subprocess.check_output("gh release view --repo=GSM-MSG/SMS-Android --json body", shell=True).decode()
-                await message.channel.send(content = f"변경사항들은 아래와 같아!\n{release_output[9:-3]}")
-                os.system(f'gh pr create --repo=GSM-MSG/SMS-Android --title "🔀 :: (TAG: Release) - VersionCode: {pr_versioncode}, VersionName: {pr_versionname}" --body "Develop에서 Master로 Merge하기 위한 PR입니다" --base "master" --head "develop"')
+                await message.channel.send(content = f"변경사항들은 아래와 같고 pr이 업로드 됐을거야 확인해줘!\n{release_output[9:-3]}")
+                os.system(f'gh pr create --repo=GSM-MSG/SMS-Android --title "🔀 :: (TAG: {release_tag}) - VersionCode: {pr_versioncode}, VersionName: {pr_versionname}" --body "## 🚀 Release Info \n - VersionCode: {pr_versioncode} \n- VersionName: {pr_versioncode} " --base "master" --head "develop"')
                 break
+            
     # @discord.ui.button(label="백엔드 ERROR 로그보기", style=discord.ButtonStyle.red)
     # async def backend_error_log(self, interaction : discord.Interaction, button: discord.ui.Button):
     #     log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
