@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static%}
+<html lang = "ko">
+<head>
+    <meta charset="utf-8">
+    <title>Info</title>
+    <link rel="stylesheet" href="{% static 'css/info.css' %}">
+    <link rel="stylesheet" href="{% static 'css/reset.css'%}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+</head>
+<div class = "info">
+    <div class = "info-sft-icon">
+        <div class = "info-sft-icon-conteinr"><img src="{% static 'images/sft_icon.png' %}">SFT</div>
+    </div>
+    <div class = "info-container">
+        <div class = "info-dashboards-tab"><img src="{% static 'images/dashboards.png' %}">Dashboards</div>
+        <div class = "info-settings-tab"><img src="{% static 'images/settings.png' %}">Settings</div>
+        <div class = "info-logout-tab"><img src="{% static 'images/logout.png' %}">Logout</div>
+    </div>
+</div>
+</html>
