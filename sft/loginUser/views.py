@@ -3,4 +3,4 @@ import os
 
 def index(request):
     print("test")
-    return render(request, 'index.html')
+    return render(request, 'info.html')
