@@ -59,7 +59,7 @@ jobs:
         export TF_VAR_user_name="${{ env.user_name }}"
         terraform apply -auto-approve
 
-    - name: SMS terraform CI Discord Notification
+    - name: SMS terraform CD Discord Notification
       uses: sarisia/actions-status-discord@v1
       if: ${{ success() }}
       with:
@@ -67,7 +67,7 @@ jobs:
         webhook: ${{ secrets.SMS_DISCORD_WEBHOOK }}
         color: 00FF00
 
-    - name: SMS terraform CI Discord Notification
+    - name: SMS terraform CD Discord Notification
       uses: sarisia/actions-status-discord@v1
       if: ${{ failure() }}
       with:
