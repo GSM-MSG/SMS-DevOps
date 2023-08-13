@@ -55,7 +55,7 @@ jobs:
       run: |
         cd terraform
         export TF_VAR_db_password="${{ env.db_password }}"
-        export TF_VAR_code_pipeline_bucekt="${{ env.code_pipeline_bucekt }}"
+        export TF_VAR_code_pipeline_bucket="${{ env.code_pipeline_bucket }}"
         export TF_VAR_user_name="${{ env.user_name }}"
         terraform apply -auto-approve
 
