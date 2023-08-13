@@ -17,7 +17,13 @@ resource "aws_instance" "sms-main-server" {
     instance_type = "t3.medium"
     subnet_id = "${aws_subnet.sms-private-subnet-2a.id}"
     vpc_security_group_ids = [aws_security_group.sms-main-server-sg.id]
+
+    iam_instance_profile = "aws_iam_instance_profile.ec2_profile.name"
+
     key_name = "sms-key"
+
+    user_data = "${file("init-cloudwatch.sh")}"
+
     associate_public_ip_address = false
     source_dest_check = false
 
