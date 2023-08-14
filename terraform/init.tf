@@ -7,8 +7,3 @@ terraform {
         dynamodb_table = "LockID"
     }
 }
-
-provider "aws" {
-    region = "ap-northeast-2" 
-    version = "~> 2.49.0" 
-}
