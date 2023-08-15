@@ -4,7 +4,7 @@ on:
     push:
       paths:
         - "terraform/**"  
-      branches: [main]
+      branches: [main, terraform-refactoring]
 
 
 env:
