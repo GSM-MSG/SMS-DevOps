@@ -54,3 +54,5 @@ resource "aws_db_instance" "sms-backend-database" {
     password = var.db_password
     port = "3306"
 }
+
+# test

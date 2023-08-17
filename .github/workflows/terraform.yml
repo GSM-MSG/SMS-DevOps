@@ -1,15 +1,15 @@
 # terraform.yaml
-name: sms-devops-trraform-pipeline
+name: sms-devops-terraform-pipeline
 on:
     push:
       paths:
         - "terraform/**"  
-      branches: [main]
+      branches: [main, terraform-refactoring]
 
 
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
-  code_pipeline_bucekt: ${{ secrets.CODE_PIPELINE_BUCKET }}
+  code_pipeline_bucket: ${{ secrets.CODE_PIPELINE_BUCKET }}
   db_password: ${{ secrets.DB_PASSWORD }}
   user_name: ${{ secrets.USER_NAME }}
 
@@ -46,7 +46,7 @@ jobs:
       run: |
         cd terraform
         export TF_VAR_db_password="${{ env.db_password }}"
-        export TF_VAR_code_pipeline_bucekt="${{ env.code_pipeline_bucekt }}"
+        export TF_VAR_code_pipeline_bucket="${{ env.code_pipeline_bucket }}"
         export TF_VAR_user_name="${{ env.user_name }}"
         terraform plan -input=false
 
@@ -55,11 +55,11 @@ jobs:
       run: |
         cd terraform
         export TF_VAR_db_password="${{ env.db_password }}"
-        export TF_VAR_code_pipeline_bucekt="${{ env.code_pipeline_bucekt }}"
+        export TF_VAR_code_pipeline_bucket="${{ env.code_pipeline_bucket }}"
         export TF_VAR_user_name="${{ env.user_name }}"
         terraform apply -auto-approve
 
-    - name: SMS terraform CI Discord Notification
+    - name: SMS terraform CD Discord Notification
       uses: sarisia/actions-status-discord@v1
       if: ${{ success() }}
       with:
@@ -67,7 +67,7 @@ jobs:
         webhook: ${{ secrets.SMS_DISCORD_WEBHOOK }}
         color: 00FF00
 
-    - name: SMS terraform CI Discord Notification
+    - name: SMS terraform CD Discord Notification
       uses: sarisia/actions-status-discord@v1
       if: ${{ failure() }}
       with:
