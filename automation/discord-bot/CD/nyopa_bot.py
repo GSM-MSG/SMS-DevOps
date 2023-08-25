@@ -2,6 +2,7 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import discord
 import asyncio
+import requests
 import os
 import json
 import subprocess
@@ -12,6 +13,8 @@ bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 load_dotenv()
 token = os.getenv("token")
 channel_url = os.getenv("channel")
+ios_channel_url = os.getenv("ios_channel")
+ios_gittoken = os.getenv("ios_gittoken")
 
 @bot.event
 async def on_ready():
@@ -23,7 +26,7 @@ async def 뇨파(ctx):
     await ctx.reply("뇨~ 뭘 도와줄까?",view=view)
 
 class Deploy(discord.ui.View):
-    @discord.ui.button(label="릴리즈 노트 작성", style=discord.ButtonStyle.green)
+    @discord.ui.button(label="안드로이드 릴리즈 노트 작성", style=discord.ButtonStyle.green)
     async def android_deploy(self, interaction : discord.Interaction, button: discord.ui.Button):
         global release_tag
         global release_title
@@ -75,6 +78,45 @@ class Deploy(discord.ui.View):
                 os.system(f'gh pr create --repo=GSM-MSG/SMS-Android --title "🔀 :: (TAG: {release_tag}) - VersionCode: {pr_versioncode}, VersionName: {pr_versionname}" --body "## 🚀 Release Info \n - VersionCode: {pr_versioncode} \n- VersionName: {pr_versionname} " --base "master" --head "develop"')
                 break
             
+    @discord.ui.button(label="IOS 워크플로우 실행", style=discord.ButtonStyle.green)
+    async def ios_deploy(self, interaction : discord.Interaction, button: discord.ui.Button):
+        global release_tag
+        global release_title
+        
+        member = interaction.user
+        channel = bot.get_channel(int(ios_channel_url))
+        await interaction.response.send_message(content = "릴리즈 버전을 작성해줘.")
+        while(True):
+            try: 
+                message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
+            except asyncio.TimeoutError:
+                await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
+            else:
+                release_version  = message.content
+                await message.channel.send(content = "변경사항을 작성해줘.")
+                try: 
+                    message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
+                except asyncio.TimeoutError:
+                    await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
+                else:
+                    release_content = message.content
+                    try:
+                        headers = {'Authorization': f'token {ios_gittoken}', 'Accept': 'application/vnd.github+json'}
+                        requests.post('https://api.github.com/repos/GSM-MSG/SMS-iOS/actions/workflows/67054831/dispatches', 
+                                        json = {"ref": "master",
+                                                "inputs": {
+                                                    "version": f"{release_version}",
+                                                    "changed": f"{release_content}"}
+                                        },
+                                        headers=headers
+                                        )
+                    except subprocess.CalledProcessError as e:
+                        print(e.returncode)
+                        print(e.output)
+                    await message.channel.send(content = "뇨 ~ 다른 친구에서 requets를 보냈어! 그 친구가 제대로 일하고 있는지 확인해줘!")
+                break
+
+
     # @discord.ui.button(label="백엔드 ERROR 로그보기", style=discord.ButtonStyle.red)
     # async def backend_error_log(self, interaction : discord.Interaction, button: discord.ui.Button):
     #     log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
