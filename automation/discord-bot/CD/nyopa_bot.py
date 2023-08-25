@@ -78,7 +78,7 @@ class Deploy(discord.ui.View):
                 os.system(f'gh pr create --repo=GSM-MSG/SMS-Android --title "🔀 :: (TAG: {release_tag}) - VersionCode: {pr_versioncode}, VersionName: {pr_versionname}" --body "## 🚀 Release Info \n - VersionCode: {pr_versioncode} \n- VersionName: {pr_versionname} " --base "master" --head "develop"')
                 break
             
-    @discord.ui.button(label="IOS 워크플로우 실행", style=discord.ButtonStyle.green)
+    @discord.ui.button(label="iOS 워크플로우 실행", style=discord.ButtonStyle.green)
     async def ios_deploy(self, interaction : discord.Interaction, button: discord.ui.Button):
         global release_tag
         global release_title
