@@ -4,4 +4,9 @@ resource "aws_dynamodb_table" "lockid-table"{
     read_capacity  = 10
     write_capacity = 10
     hash_key       = "terrafomr-lock"
+
+    attribute {
+        name = "LockID"
+        type = "S"
+    }
 }
