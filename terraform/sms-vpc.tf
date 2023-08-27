@@ -64,6 +64,16 @@ resource "aws_internet_gateway" "sms-igw" {
     }
 }
 
+# Create Nat
+resource "aws_nat_gateway" "sms-nat" {
+    subnet_id = aws_subnet.sms-public-subnet-2a.id
+
+    tags = {
+        Name = "sms-nat"
+    }
+}
+
+
 # Create RTB 
 ## Create Public RTB
 resource "aws_route_table" "sms-public-rtb" {
@@ -111,4 +121,11 @@ resource "aws_route" "public-rt-igw" {
     route_table_id = aws_route_table.sms-public-rtb.id
     destination_cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.sms-igw.id
+}
+
+## Nat Register RTB
+resource "aws_route" "private-rt-nat" {
+    route_table_id = aws_route_table.sms-private-rtb.id
+    destination_cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.sms-nat.id
 }
