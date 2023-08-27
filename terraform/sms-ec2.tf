@@ -1,5 +1,5 @@
 # Create Instance
-# Create Bastion + Nat Instance
+## Create Bastion + Nat Instance
 resource "aws_instance" "sms-bastion" {
     ami = "ami-04cebc8d6c4f297a3"
     instance_type =  "t2.nano"
@@ -12,7 +12,7 @@ resource "aws_instance" "sms-bastion" {
     }
 }
 
-# Create Main Server
+## Create Main Server
 resource "aws_instance" "sms-main-server" {
     ami = "ami-04cebc8d6c4f297a3"
     instance_type = "t3.medium"
@@ -28,7 +28,7 @@ resource "aws_instance" "sms-main-server" {
 }   
 
 # Create SG
-# Create Bastion SG
+## Create Bastion SG
 resource "aws_security_group" "sms-bastion-sg" {
     vpc_id = "${aws_vpc.sms-vpc.id}"
 
@@ -50,7 +50,7 @@ resource "aws_security_group" "sms-bastion-sg" {
     }
 }
 
-# Create Main Server SG
+## Create Main Server SG
 resource "aws_security_group" "sms-main-server-sg" {
     vpc_id = "${aws_vpc.sms-vpc.id}"
 
