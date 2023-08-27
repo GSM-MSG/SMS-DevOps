@@ -3,7 +3,7 @@ resource "aws_dynamodb_table" "lockid-table"{
     billing_mode   = "PROVISIONED"
     read_capacity  = 10
     write_capacity = 10
-    hash_key       = "terrafomr-lock"
+    hash_key       = "terraform-lock"
 
     attribute {
         name = "LockID"
