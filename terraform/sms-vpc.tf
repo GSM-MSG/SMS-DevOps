@@ -64,8 +64,18 @@ resource "aws_internet_gateway" "sms-igw" {
     }
 }
 
+# Create EIP
+resource "aws_eip" "nat_ip" {
+    vpc = true
+
+    lifecycle {
+        cretae_before_destroy = true
+    }
+}
+
 # Create Nat
 resource "aws_nat_gateway" "sms-nat" {
+    allocation_id = aws_eip.nat_ip.id
     subnet_id = aws_subnet.sms-public-subnet-2a.id
 
     tags = {
