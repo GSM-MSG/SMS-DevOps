@@ -69,7 +69,7 @@ resource "aws_eip" "nat_ip" {
     vpc = true
 
     lifecycle {
-        cretae_before_destroy = true
+        create_before_destroy = true
     }
 }
 
