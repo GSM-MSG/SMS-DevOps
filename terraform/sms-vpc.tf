@@ -127,5 +127,5 @@ resource "aws_route" "public-rt-igw" {
 resource "aws_route" "private-rt-nat" {
     route_table_id = aws_route_table.sms-private-rtb.id
     destination_cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.sms-nat.id
+    nat_gateway_id = aws_nat_gateway.sms-nat.id
 }
