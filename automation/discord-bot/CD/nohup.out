@@ -1,0 +1,10 @@
+[30;1m2023-06-16 12:09:30[0m [34;1mINFO    [0m [35mdiscord.client[0m logging in using static token
+[30;1m2023-06-16 12:09:31[0m [34;1mINFO    [0m [35mdiscord.gateway[0m Shard ID None has connected to Gateway (Session ID: a2981d0a5a20c4d397469384c5384afa).
+sh: token.txt: No such file or directory
+I'm ready
+Unclosed connector
+connections: ['[(<aiohttp.client_proto.ResponseHandler object at 0x103118ac0>, 655011.1989115)]']
+connector: <aiohttp.connector.TCPConnector object at 0x10312c8b0>
+[30;1m2023-06-16 12:09:43[0m [34;1mINFO    [0m [35mdiscord.client[0m logging in using static token
+[30;1m2023-06-16 12:09:44[0m [34;1mINFO    [0m [35mdiscord.gateway[0m Shard ID None has connected to Gateway (Session ID: 0d0977c9f1a44245ac160e46b11aa084).
+sh: token.txt: No such file or directory
