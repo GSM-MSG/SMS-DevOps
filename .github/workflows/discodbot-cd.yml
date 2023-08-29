@@ -24,6 +24,9 @@ jobs:
         shell: bash
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -33,7 +36,7 @@ jobs:
 
     - name: Create .env
       run: |
-        ls
+        cd ./automation/discord-bot/CD
         touch .env
         echo "${{ secrets.NYOPA_ENV }}" > .env
       shell: bash
@@ -48,7 +51,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: latest
       run: |
-        ls
+        cd ./automation/discord-bot/CD
         docker build -t ${{ secrets.ECR_REPOSITORY }} .
         docker tag ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG ${{ secrets.REPO_URL }}:$IMAGE_TAG
         docker push ${{ secrets.REPO_URL }}:$IMAGE_TAG
