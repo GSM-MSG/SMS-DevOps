@@ -1,10 +1,10 @@
 #discodbot.yml
 name: sms-discodbot-pipeline
 on:
-    push:
-      paths:
-        - "automation/discord-bot/CD/**"  
-      branches: [main]
+  push:
+    paths:
+      - "automation/discord-bot/CD/**"  
+    branches: [ main ]
 
 env:
   token: ${{ secrets.DISCORD_BOT_TOKEN }}
@@ -31,13 +31,25 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
 
-    - name : CodeDeploy Create Deployment
+    - name: Create .env
       run: |
-        aws deploy create-deployment \
-        --application-name sms-discord-codedeploy-application \
-        --deployment-group-name sms-discordbot-deploygroup \
-        --deployment-config-name CodeDeployDefault.OneAtATime \
-        --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
+        touch ./automation/discord-bot/CD/.env
+        echo "${{ secrets.NYOPA_ENV }}" > ./automation/discord-bot/CD/.env
+      shell: bash
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: latest
+      run: |
+        docker build -t ${{ secrets.ECR_REPOSITORY }} -f ./automation/discord-bot/CD/Dockerfile .
+        docker tag ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG ${{ secrets.REPO_URL }}:$IMAGE_TAG
+        docker push ${{ secrets.REPO_URL }}:$IMAGE_TAG
 
           
     - name: SMS-Backend-CD Discord Notification
