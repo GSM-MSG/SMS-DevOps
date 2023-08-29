@@ -74,25 +74,5 @@ class Deploy(discord.ui.View):
                 await message.channel.send(content = f"변경사항들은 아래와 같고 pr이 업로드 됐을거야 확인해줘!\n{release_output[9:-3]}")
                 os.system(f'gh pr create --repo=GSM-MSG/SMS-Android --title "🔀 :: (TAG: {release_tag}) - VersionCode: {pr_versioncode}, VersionName: {pr_versionname}" --body "## 🚀 Release Info \n - VersionCode: {pr_versioncode} \n- VersionName: {pr_versionname} " --base "master" --head "develop"')
                 break
-            
-    # @discord.ui.button(label="백엔드 ERROR 로그보기", style=discord.ButtonStyle.red)
-    # async def backend_error_log(self, interaction : discord.Interaction, button: discord.ui.Button):
-    #     log_data = subprocess.check_output('aws logs filter-log-events --log-group-name sms-logs --log-stream-names i-02468f866c3293595 --filter-pattern ERROR'.split(" "))
-    #     dict_log = json.loads(log_data)
-    #     print(dict_log)
-    #     test = []
-    #     error_log = ''
-
-        
-    #     for i in dict_log["events"]:
-    #         test.append(i["message"].split(" : ")[1])
-
-    #     print(test)
-        
-    #     for i in test[:5]:
-    #             error_log = error_log + i + '\n'
-
-    #     await interaction.response.send_message(content = error_log)
-
 
 bot.run(token)
