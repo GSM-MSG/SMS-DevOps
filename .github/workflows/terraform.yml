@@ -48,7 +48,7 @@ jobs:
         export TF_VAR_db_password="${{ env.db_password }}"
         export TF_VAR_code_pipeline_bucket="${{ env.code_pipeline_bucket }}"
         export TF_VAR_user_name="${{ env.user_name }}"
-        terraform plan -input=false
+        terraform plan -input=false -lock=false
 
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
