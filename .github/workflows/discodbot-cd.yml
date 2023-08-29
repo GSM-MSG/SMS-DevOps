@@ -33,8 +33,8 @@ jobs:
 
     - name: Create .env
       run: |
-        touch ./automation/discord-bot/CD/.env
-        echo "${{ secrets.NYOPA_ENV }}" > ./automation/discord-bot/CD/.env
+        touch .env
+        echo "${{ secrets.NYOPA_ENV }}" > .env
       shell: bash
 
     - name: Login to Amazon ECR
@@ -47,7 +47,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: latest
       run: |
-        docker build -t ${{ secrets.ECR_REPOSITORY }} -f ./automation/discord-bot/CD/Dockerfile .
+        docker build -t ${{ secrets.ECR_REPOSITORY }} .
         docker tag ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG ${{ secrets.REPO_URL }}:$IMAGE_TAG
         docker push ${{ secrets.REPO_URL }}:$IMAGE_TAG
 
