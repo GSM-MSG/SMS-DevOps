@@ -116,4 +116,5 @@ class Deploy(discord.ui.View):
                     await message.channel.send(content = "뇨 ~ 다른 친구에서 requets를 보냈어! 그 친구가 제대로 일하고 있는지 확인해줘!")
                 break
 
+
 bot.run(token)
