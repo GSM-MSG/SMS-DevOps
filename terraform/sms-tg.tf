@@ -3,7 +3,10 @@ resource "aws_lb_target_group" "sms-tg" {
     port     = 80
     protocol = "HTTP"
     vpc_id   = aws_vpc.sms-vpc.id
-    health_check = "/health"
+    
+    health_check {
+        path = "/health"
+    }
 }
 
 resource "aws_lb_target_group_attachment" "sms-tg-attachment_st" {
