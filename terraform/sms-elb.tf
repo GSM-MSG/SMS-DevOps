@@ -3,7 +3,10 @@ resource "aws_lb" "sms-alb" {
   internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.sms-alb-sg]
-  subnets            = [for subnet in aws_subnet.public : subnet.id]
+  subnets            = [
+        "${aws_subnet.sms-public-subnet-2a.id}",
+        "${aws_subnet.sms-public-subnet-2b.id}"
+  ]
 
   enable_deletion_protection = false
 
