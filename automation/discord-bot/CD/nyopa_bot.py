@@ -7,6 +7,10 @@ import os
 import json
 import subprocess
 from pprint import pprint
+import discord
+from discord.ext import commands
+
+
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -35,12 +39,13 @@ class Deploy(discord.ui.View):
         channel = bot.get_channel(int(channel_url))
         await interaction.response.send_message(content = "릴리즈 타이틀을 작성해줘.")
         while(True):
-            try: 
+            try:
                 message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
             except asyncio.TimeoutError:
                 await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
             else:
                 release_title  = message.content
+                print(release_title)
                 await message.channel.send(content = "릴리즈 태그를 작성해줘.")
                 try: 
                     message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
@@ -53,7 +58,8 @@ class Deploy(discord.ui.View):
                     except subprocess.CalledProcessError as e:
                         print(e.returncode)
                         print(e.output)
-                    await message.channel.send(content = "뇨 ~ 릴리즈 노트를 작성했어. 바로 pr 올리기를 통해서 배포 준비를 진행해줘!")
+                    else:
+                        await message.channel.send(content = "뇨 ~ 릴리즈 노트를 작성했어. 바로 pr 올리기를 통해서 배포 준비를 진행해줘!")
                 break
     
     @discord.ui.button(label="안드로이드 Merge PR 올리기", style=discord.ButtonStyle.green)
@@ -115,5 +121,7 @@ class Deploy(discord.ui.View):
                         print(e.output)
                     await message.channel.send(content = "뇨 ~ 다른 친구에서 requets를 보냈어! 그 친구가 제대로 일하고 있는지 확인해줘!")
                 break
+        
+
 
 bot.run(token)
