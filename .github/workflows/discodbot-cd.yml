@@ -45,7 +45,7 @@ jobs:
       run: |
         cd ./automation/discord-bot/CD
         touch token.txt
-        echo "${{ secrets.NYOPA_GIT_TOKEN }} > token.txt
+        echo "${{ secrets.NYOPA_GIT_TOKEN }}" > token.txt
 
     - name: Login to Amazon ECR
       id: login-ecr
