@@ -13,6 +13,17 @@ resource "aws_lb" "sms-alb" {
   }
 }
 
+resource "aws_lb_listener" "sms-alb-listener" {
+  load_balancer_arn = aws_lb.sms-alb.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.sms-tg.arn
+  }
+}
+
 resource "aws_security_group" "sms-alb-sg" {
     vpc_id = "${aws_vpc.sms-vpc.id}"
 
@@ -48,3 +59,4 @@ resource "aws_security_group" "sms-alb-sg" {
         Name = "sms-alb-sg"
     }
 }
+
