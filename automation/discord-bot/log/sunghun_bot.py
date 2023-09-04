@@ -5,7 +5,7 @@ import dotenv
 import discord
 from discord.ext import commands
 
-from log_pagination_view import MainView
+from main_view import MainView
 
 dotenv_file = dotenv.find_dotenv()
 dotenv.load_dotenv(dotenv_file)
@@ -21,10 +21,9 @@ async def 안녕(ctx):
     await ctx.send('난 부자다 으하하하')
 
 
-@bot.command(aliases=['ㄹ'])
-async def 도와줘(ctx, log_type, log_amount):
-    view = MainView()
-    # log = load_log(log_type, log_amount)
-    await ctx.reply("아~ 귀찮게 또 뭘 시키는거야", view)
+@bot.command(aliases=['ㄷ'])
+async def 도와줘(ctx):
+    view = MainView(ctx)
+    await ctx.reply("아~ 귀찮게 또 뭘 시키는거야", view=view)
 
 bot.run(os.environ["TOKEN"])
