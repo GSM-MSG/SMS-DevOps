@@ -2,7 +2,7 @@ resource "aws_lb" "sms-alb" {
   name               = "sms-alb"
   internal           = true
   load_balancer_type = "application"
-  security_groups    = "${aws_security_group.sms-alb-sg}"
+  security_groups    = ["${aws_security_group.sms-alb-sg.id}"]
   subnets            = [
         "${aws_subnet.sms-public-subnet-2a.id}",
         "${aws_subnet.sms-public-subnet-2b.id}"
