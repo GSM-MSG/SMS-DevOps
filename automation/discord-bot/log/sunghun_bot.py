@@ -5,7 +5,7 @@ import dotenv
 import discord
 from discord.ext import commands
 
-from log_pagination_view import LogPaginationView
+from log_pagination_view import MainView
 
 dotenv_file = dotenv.find_dotenv()
 dotenv.load_dotenv(dotenv_file)
@@ -22,8 +22,8 @@ async def 안녕(ctx):
 
 
 @bot.command(aliases=['ㄹ'])
-async def 로그보여줘(ctx, log_type, log_amount):
-    view = LogPaginationView()
+async def 도와줘(ctx, log_type, log_amount):
+    view = MainView()
     # log = load_log(log_type, log_amount)
     await ctx.reply("아~ 귀찮게 또 뭘 시키는거야", view)
 
