@@ -1,6 +1,6 @@
 resource "aws_lb" "sms-alb" {
   name               = "sms-alb"
-  internal           = true
+  internal           = false
   load_balancer_type = "application"
   security_groups    = ["${aws_security_group.sms-alb-sg.id}"]
   subnets            = [
