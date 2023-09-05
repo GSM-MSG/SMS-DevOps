@@ -41,6 +41,12 @@ jobs:
         echo "${{ secrets.NYOPA_ENV }}" > .env
       shell: bash
 
+    - name : Create token.txt
+      run: |
+        cd ./automation/discord-bot/CD
+        touch token.txt
+        echo "${{ secrets.NYOPA_GIT_TOKEN }}" > token.txt
+
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1

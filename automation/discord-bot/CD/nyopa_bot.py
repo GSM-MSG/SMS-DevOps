@@ -7,6 +7,10 @@ import os
 import json
 import subprocess
 from pprint import pprint
+import discord
+from discord.ext import commands
+
+
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -35,12 +39,13 @@ class Deploy(discord.ui.View):
         channel = bot.get_channel(int(channel_url))
         await interaction.response.send_message(content = "릴리즈 타이틀을 작성해줘.")
         while(True):
-            try: 
+            try:
                 message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
             except asyncio.TimeoutError:
                 await message.channel.send("30초가 지났어. 명령어를 다시 실행시켜줘.")
             else:
                 release_title  = message.content
+                print(release_title)
                 await message.channel.send(content = "릴리즈 태그를 작성해줘.")
                 try: 
                     message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
@@ -53,7 +58,8 @@ class Deploy(discord.ui.View):
                     except subprocess.CalledProcessError as e:
                         print(e.returncode)
                         print(e.output)
-                    await message.channel.send(content = "뇨 ~ 릴리즈 노트를 작성했어. 바로 pr 올리기를 통해서 배포 준비를 진행해줘!")
+                    else:
+                        await message.channel.send(content = "뇨 ~ 릴리즈 노트를 작성했어. 바로 pr 올리기를 통해서 배포 준비를 진행해줘!")
                 break
     
     @discord.ui.button(label="안드로이드 Merge PR 올리기", style=discord.ButtonStyle.green)
@@ -73,8 +79,9 @@ class Deploy(discord.ui.View):
                 pr_versioncode = message.content[0]
                 pr_versionname = message.content[2:]
                 release_tag = (str(subprocess.check_output("gh release list --repo=GSM-MSG/SMS-Android --limit 1", shell=True, encoding='utf-8')).split("\t"))[2]
-                release_output = subprocess.check_output("gh release view --repo=GSM-MSG/SMS-Android --json body", shell=True).decode()
-                await message.channel.send(content = f"변경사항들은 아래와 같고 pr이 업로드 됐을거야 확인해줘!\n{release_output[9:-3]}")
+                release_output = subprocess.check_output("gh pr list --repo=GSM-MSG/SMS-Android --json url", shell=True, encoding='utf-8')
+                json_change = json.loads(release_output)
+                await message.channel.send(content = f"변경사항들은 아래와 같고 pr이 업로드 됐을거야 확인해줘!\n{(json_change[0]).get('url')}")
                 os.system(f'gh pr create --repo=GSM-MSG/SMS-Android --title "🔀 :: (TAG: {release_tag}) - VersionCode: {pr_versioncode}, VersionName: {pr_versionname}" --body "## 🚀 Release Info \n - VersionCode: {pr_versioncode} \n- VersionName: {pr_versionname} " --base "master" --head "develop"')
                 break
             
@@ -115,5 +122,7 @@ class Deploy(discord.ui.View):
                         print(e.output)
                     await message.channel.send(content = "뇨 ~ 다른 친구에서 requets를 보냈어! 그 친구가 제대로 일하고 있는지 확인해줘!")
                 break
+        
+
 
 bot.run(token)
