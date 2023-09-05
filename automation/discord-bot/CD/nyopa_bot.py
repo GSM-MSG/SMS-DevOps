@@ -79,8 +79,9 @@ class Deploy(discord.ui.View):
                 pr_versioncode = message.content[0]
                 pr_versionname = message.content[2:]
                 release_tag = (str(subprocess.check_output("gh release list --repo=GSM-MSG/SMS-Android --limit 1", shell=True, encoding='utf-8')).split("\t"))[2]
-                release_output = subprocess.check_output("gh pr list --repo=GSM-MSG/SMS-Android --json url --limit 1", shell=True, encoding='utf-8')
-                await message.channel.send(content = f"변경사항들은 아래와 같고 pr이 업로드 됐을거야 확인해줘!\n{release_output[8:-3]}")
+                release_output = subprocess.check_output("gh pr list --repo=GSM-MSG/SMS-Android --json url", shell=True, encoding='utf-8')
+                json_change = json.loads(release_output)
+                await message.channel.send(content = f"변경사항들은 아래와 같고 pr이 업로드 됐을거야 확인해줘!\n{(json_change[0]).get('url')}")
                 os.system(f'gh pr create --repo=GSM-MSG/SMS-Android --title "🔀 :: (TAG: {release_tag}) - VersionCode: {pr_versioncode}, VersionName: {pr_versionname}" --body "## 🚀 Release Info \n - VersionCode: {pr_versioncode} \n- VersionName: {pr_versionname} " --base "master" --head "develop"')
                 break
             
