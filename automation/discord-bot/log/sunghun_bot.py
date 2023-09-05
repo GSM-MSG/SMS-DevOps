@@ -20,10 +20,10 @@ async def on_ready():
 async def 안녕(ctx):
     await ctx.send('난 부자다 으하하하')
 
-
 @bot.command(aliases=['ㄷ'])
 async def 도와줘(ctx):
     view = MainView(ctx)
     await ctx.reply("아~ 귀찮게 또 뭘 시키는거야", view=view)
 
-bot.run(os.environ["TOKEN"])
+if __name__ == "__main__":
+    bot.run(os.environ["TOKEN"])
