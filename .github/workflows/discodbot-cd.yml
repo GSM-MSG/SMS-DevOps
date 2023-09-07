@@ -3,7 +3,7 @@ name: sms-discodbot-pipeline
 on:
   push:
     paths:
-      - "automation/discord-bot/CD/**"  
+      - "automation/discord-bot/CD/**"
     branches: [ main ]
 
 env:
