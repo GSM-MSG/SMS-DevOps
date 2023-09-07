@@ -46,7 +46,7 @@ def load_log(level: str, amount: int):
     elif level == 'WARN':
         log_message = [m for m in log_message if m[25:29] == level]
     elif level == 'ERROR':
-        log_message = [m for m in log_message if m[25:30] == level]
+        log_message = [m for m in log_message if m[24:29] == level]
     else:
         print(f"{level} should be one of [INFO, WARN, ERROR]. return all data")
 
