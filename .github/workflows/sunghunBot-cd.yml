@@ -1,0 +1,70 @@
+#discodbot.yml
+name: sms-discodbot-pipeline
+on:
+  push:
+    paths:
+      - "automation/discord-bot/log/**"
+    branches: [ main ]
+
+permissions:
+  contents: read
+
+jobs:
+  discord_bot:
+    name: 'Discord_bot'
+    runs-on: ubuntu-latest
+    environment: production
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Create .env
+      run: |
+        cd ./automation/discord-bot/log
+        touch .env
+        echo "${{ secrets.SUNGHUN_ENV }}" > .env
+      shell: bash
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: latest
+      run: |
+        cd ./automation/discord-bot/log
+        docker build -t ${{ secrets.SUNGHUN_ECR_REPOSITORY }} .
+        docker tag ${{ secrets.SUNGHUN_ECR_REPOSITORY }}:$IMAGE_TAG ${{ secrets.SUNGHUN_REPO_URL }}:$IMAGE_TAG
+        docker push ${{ secrets.SUNGHUN_REPO_URL }}:$IMAGE_TAG
+
+
+    - name: SMS-Backend-CD Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: ${{ success() }}
+      with:
+        title: ✅ SMS-DiscordBot-CD 성공! ✅
+        webhook: ${{ secrets.SMS_DISCORD_CD_WEBHOOK }}
+        color: 00FF00
+
+    - name: SMS-Backend-CD Discord Notification
+      uses: sarisia/actions-status-discord@v1
+      if: ${{ failure() }}
+      with:
+        title: ❗️ SMS-DiscordBot-CD 실패! ❗️
+        webhook: ${{ secrets.SMS_DISCORD_CD_WEBHOOK }}
+        color: FF0000
