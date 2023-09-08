@@ -48,9 +48,9 @@ jobs:
         IMAGE_TAG: latest
       run: |
         cd ./automation/discord-bot/log
-        docker build -t ${{ secrets.ECR_REPOSITORY }} .
-        docker tag ${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG ${{ secrets.REPO_URL }}:$IMAGE_TAG
-        docker push ${{ secrets.REPO_URL }}:$IMAGE_TAG
+        docker build -t ${{ secrets.SUNGHUN_ECR_REPOSITORY }} .
+        docker tag ${{ secrets.SUNGHUN_ECR_REPOSITORY }}:$IMAGE_TAG ${{ secrets.SUNGHUN_REPO_URL }}:$IMAGE_TAG
+        docker push ${{ secrets.SUNGHUN_REPO_URL }}:$IMAGE_TAG
 
 
     - name: SMS-Backend-CD Discord Notification
