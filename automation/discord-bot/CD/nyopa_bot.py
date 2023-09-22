@@ -16,7 +16,7 @@ bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
 load_dotenv()
 token = os.getenv("token")
-channel_url = os.getenv("channel")
+aos_channel_url = os.getenv("channel")
 ios_channel_url = os.getenv("ios_channel")
 ios_gittoken = os.getenv("ios_gittoken")
 
@@ -36,7 +36,7 @@ class Deploy(discord.ui.View):
         global release_title
         
         member = interaction.user
-        channel = bot.get_channel(int(channel_url))
+        channel = bot.get_channel(int(aos_channel_url))
         await interaction.response.send_message(content = "릴리즈 타이틀을 작성해줘.")
         while(True):
             try:
@@ -68,7 +68,7 @@ class Deploy(discord.ui.View):
         global release_title
         
         member = interaction.user
-        channel = bot.get_channel(int(channel_url))
+        channel = bot.get_channel(int(aos_channel_url))
         await interaction.response.send_message(content = "develop에서 master로 머지하는 pr를 올릴게. 버전 코드와 버전 이름을 알려줘. \n 예시)5,1.0.0")
         while(True):
             try: 
