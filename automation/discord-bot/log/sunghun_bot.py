@@ -23,7 +23,8 @@ async def 안녕(ctx):
 @bot.command(aliases=['ㄷ'])
 async def 도와줘(ctx):
     view = MainView(ctx)
-    await ctx.reply("아~ 귀찮게 또 뭘 시키는거야", view=view)
+    if ctx.message.channel == bot.get_channel(int(os.environ["LOG_CHANNEL"])):
+        await ctx.reply("아~ 귀찮게 또 뭘 시키는거야", view=view)
 
 if __name__ == "__main__":
     bot.run(os.environ["TOKEN"])
