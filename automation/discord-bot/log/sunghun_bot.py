@@ -23,9 +23,6 @@ async def 안녕(ctx):
 @bot.command(aliases=['ㄷ'])
 async def 도와줘(ctx):
     view = MainView(ctx)
-    # message = await bot.wait_for("message", check=lambda m: m.author == member and m.channel == channel, timeout=30.0)
-    print(ctx.message.channel)
-    print(bot.get_channel(int(os.environ["LOG_CHANNEL"])))
     if ctx.message.channel == bot.get_channel(int(os.environ["LOG_CHANNEL"])):
         await ctx.reply("아~ 귀찮게 또 뭘 시키는거야", view=view)
 
