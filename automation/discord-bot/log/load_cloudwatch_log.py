@@ -42,11 +42,11 @@ def load_log(level: str, amount: int):
     response_metadata = res['ResponseMetadata']
 
     if level == 'INFO':
-        log_message = [m for m in log_message if m[25:29] == level]
+        log_message = [m for m in log_message if m[25:].startswith(level)]
     elif level == 'WARN':
-        log_message = [m for m in log_message if m[25:29] == level]
+        log_message = [m for m in log_message if m[25:].startswith(level)]
     elif level == 'ERROR':
-        log_message = [m for m in log_message if m[24:29] == level]
+        log_message = [m for m in log_message if m[24].startswith(level)]
     else:
         print(f"{level} should be one of [INFO, WARN, ERROR]. return all data")
 
