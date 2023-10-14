@@ -26,7 +26,7 @@ def crawl_data(**context):
 
     login_url = 'https://aws.fitcloud.co.kr/login?referTo=/dashboard'
 
-    load_dotenv('./SMS-DevOps/automation/discord-bot/fee-bot/.env')
+    load_dotenv()
 
     login_data = {
         'Id': os.environ.get('username'),
