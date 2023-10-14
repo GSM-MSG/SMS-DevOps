@@ -114,7 +114,7 @@ with DAG(
     'test',
     description='test desc',
     start_date=dt.datetime(2023,10,13),
-    schedule_interval='36 9 * * *',
+    schedule_interval='0 9 * * *',
     tags=['cron', 'crawl']
 ) as dag:
 
