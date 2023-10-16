@@ -1,33 +1,32 @@
+import logging
 import datetime as dt
+from pendulum import timezone
+import asyncio
+import time
+import os
+import requests
+import re
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-import asyncio
-import time
 from dotenv import load_dotenv
-import os
-import requests
 
-import re
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-from webdriver_manager.chrome import ChromeDriverManager
-
-from discord import Webhook, Embed, Color
 import aiohttp
+
 
 def crawl_data(**context):
 
-    login_url = 'https://aws.fitcloud.co.kr/login?referTo=/dashboard'
+    from bs4 import BeautifulSoup
+    from selenium import webdriver
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
 
     load_dotenv()
 
+    login_url = os.environ.get('login_url')
     login_data = {
         'Id': os.environ.get('username'),
         'password': os.environ.get('pwd')
@@ -35,15 +34,13 @@ def crawl_data(**context):
     print(os.environ.get('username'))
     user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
     chrome_option = webdriver.ChromeOptions()
-    service = ChromeService(executable_path=ChromeDriverManager().install())
-
 
     service = ChromeService(executable_path=os.environ.get('chromedriver_path'))
     chrome_option.add_argument('headless')
-    chrome_option.add_argument(f'--user-agent={user_agent["User-Agent"]}')
-    chrome_option.add_argument('--disable-gpu')
-    chrome_option.add_argument('--lang=ko_KR')
-    chrome_option.add_argument("--window-size=1920,1080")
+    chrome_option.add_argument(f'user-agent={user_agent["User-Agent"]}')
+    chrome_option.add_argument('disable-gpu')
+    chrome_option.add_argument('lang=ko_KR')
+    chrome_option.add_argument("window-size=1920,1080")
     chrome_option.add_argument("start-maximized")
     browser = webdriver.Chrome(service=service, options=chrome_option)
     browser.get(login_url)
@@ -63,9 +60,9 @@ def crawl_data(**context):
     wait = WebDriverWait(browser, 40)
     wait.until(EC.text_to_be_present_in_element((By.CLASS_NAME, 'kt-widget16__items'), '$'))
     soup = BeautifulSoup(browser.page_source, 'html.parser')
-
+    logging.info(f'{"-"*100}')
     browser.quit()
-
+    logging.info(f'{"-" * 100}')
     source_cost_data = list()
     for aws, price in zip(soup.find_all('span', 'kt-widget16__date'), soup.find_all('span', 'kt-widget16__price')):
         source_cost_data.append((re.sub('\s', '', aws.get_text()), re.sub('\s', '', price.get_text())))
@@ -82,6 +79,9 @@ def crawl_data(**context):
 
 
 def create_embed(**context):
+
+    from discord import Embed, Color
+
     source_cost_data = context['task_instance'].xcom_pull(key='cost_data')
     period = context['task_instance'].xcom_pull(key='data_period')
     exchange_rate = context['task_instance'].xcom_pull(key='exchange_rate')
@@ -106,6 +106,8 @@ def create_embed(**context):
 
 async def send_fee_data(content):
 
+    from discord import Webhook
+
     discord_url = os.environ.get('discord_webhook_url')
     async with aiohttp.ClientSession() as session:
         webhook = Webhook.from_url(discord_url, session=session)
@@ -113,9 +115,10 @@ async def send_fee_data(content):
 
 
 with DAG(
-    'test',
+    'crawl_test',
     description='test desc',
-    start_date=dt.datetime(2023,10,13),
+    start_date=dt.datetime(2023,10,13, tzinfo=timezone("Asia/Seoul")),
+    catchup=False,
     schedule_interval='0 9 * * *',
     tags=['cron', 'crawl']
 ) as dag:
@@ -123,18 +126,16 @@ with DAG(
     t1 = PythonOperator(
         task_id="crawling",
         python_callable=crawl_data,
-        retries=3,
-        retry_delay=dt.timedelta(minutes=5)
+        retries=1,
+        retry_delay=dt.timedelta(minutes=1)
     )
 
     t2 = PythonOperator(
         task_id="creating_embed",
         python_callable=create_embed,
-        retries=3,
-        retry_delay=dt.timedelta(minutes=5)
+        retries=1,
+        retry_delay=dt.timedelta(minutes=1)
     )
-
 
     t1 >> t2
 
-dag.test()
