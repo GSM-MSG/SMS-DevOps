@@ -10,6 +10,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.service import Service as ChromeService
 
 from discord import Webhook, Embed, Color
 import aiohttp
@@ -23,6 +24,7 @@ login_data = {
     'password': os.environ.get('pwd')
 }
 user_agent = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'}
+service = ChromeService(executable_path=os.environ.get('chromedriver_path'))
 chrome_option = webdriver.ChromeOptions()
 chrome_option.add_argument('headless')
 chrome_option.add_argument(f'--user-agent={user_agent["User-Agent"]}')
@@ -30,7 +32,7 @@ chrome_option.add_argument('--disable-gpu')
 chrome_option.add_argument('--lang=ko_KR')
 chrome_option.add_argument("--window-size=1920,1080")
 chrome_option.add_argument("start-maximized")
-browser = webdriver.Chrome(options=chrome_option)
+browser = webdriver.Chrome(service=service, options=chrome_option)
 browser.get(login_url)
 
 time.sleep(3)
