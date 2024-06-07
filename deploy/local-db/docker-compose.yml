@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  mysql:
+    container_name: mysql_local
+    image: mysql:8.0.32
+    volumes:
+      # - ./db/conf.d:/etc/mysql/conf.d
+      - ./db/initdb.d:/docker-entrypoint-initdb.d # 초기시작시 DDL
+    ports:
+      - "3306:3306"
+    environment:
+      - TZ=Asia/Seoul
+    env_file:
+      - .env
