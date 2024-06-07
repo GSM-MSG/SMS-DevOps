@@ -1,0 +1,18 @@
+name: Schedule Python Script
+
+on:
+  schedule:
+    - cron: '0 7 * * *' 
+    - cron: '0 2 * * *'  
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Run Python script
+      run: |
+        python .automation/scripts/instnace_on_off.py
