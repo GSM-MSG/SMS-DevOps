@@ -15,4 +15,4 @@ jobs:
         python-version: '3.x'
     - name: Run Python script
       run: |
-        python .automation/scripts/instnace_on_off.py
+        python ./automation/pipeline_scripts/instance_on_off.py
