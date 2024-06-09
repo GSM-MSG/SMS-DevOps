@@ -15,4 +15,5 @@ jobs:
         python-version: '3.x'
     - name: Run Python script
       run: |
+        pip3 install boto3
         python ./automation/pipeline_scripts/instance_on_off.py
