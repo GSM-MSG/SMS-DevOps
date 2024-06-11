@@ -13,6 +13,12 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+
+    - name: create .env
+      run: |
+        touch .env
+        echo ${{ secrets.EC2_SCHEDULER_ENV }} >> .env
+
     - name: Run Python script
       run: |
         pip3 install boto3
