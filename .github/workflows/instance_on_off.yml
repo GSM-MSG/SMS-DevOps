@@ -30,4 +30,5 @@ jobs:
     - name: Run Python script
       run: |
         pip3 install boto3
+        pipe install dotenv
         python ./automation/pipeline_scripts/instance_on_off.py
