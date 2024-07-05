@@ -1,35 +1,36 @@
-name: Schedule Python Script
 
-on:
-  schedule:
-    - cron: '0 16 * * *' 
-    - cron: '0 9 * * *'  
-    - cron: "0 16 * * *"
-jobs:
-  run-script:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
+# name: Schedule Python Script
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+# on:
+#   schedule:
+#     - cron: '0 16 * * *' 
+#     - cron: '0 9 * * *'  
+#     - cron: "0 16 * * *"
+# jobs:
+#   run-script:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+
+#     - name: Set up Python
+#       uses: actions/setup-python@v2
+#       with:
+#         python-version: '3.x'
      
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: ap-northeast-2
 
-    - name: create .env
-      run: |
-        touch .env
-        echo ${{ secrets.EC2_SCHEDULER_ENV }} >> .env
+#     - name: create .env
+#       run: |
+#         touch .env
+#         echo ${{ secrets.EC2_SCHEDULER_ENV }} >> .env
 
-    - name: Run Python script
-      run: |
-        pip install boto3
-        pip install dotenv
-        python ./automation/pipeline_scripts/instance_on_off.py
+#     - name: Run Python script
+#       run: |
+#         pip install boto3
+#         pip install dotenv
+#         python ./automation/pipeline_scripts/instance_on_off.py
