@@ -2,8 +2,9 @@ name: Schedule Python Script
 
 on:
   schedule:
-    - cron: '0 7 * * *' 
-    - cron: '0 2 * * *'  
+    - cron: '0 16 * * *' 
+    - cron: '0 9 * * *'  
+    - cron: "0 16 * * *"
 jobs:
   run-script:
     runs-on: ubuntu-latest
@@ -29,6 +30,6 @@ jobs:
 
     - name: Run Python script
       run: |
-        pip3 install boto3
-        pipe install dotenv
+        pip install boto3
+        pip install dotenv
         python ./automation/pipeline_scripts/instance_on_off.py
