@@ -59,9 +59,11 @@ browser.quit()
 discord_url = os.environ.get('discord_webhook_url')
 total_cost = sum([float(i[1][1:]) for i in source_cost_data])
 
-KRW_url = 'https://quotation-api-cdn.dunamu.com/v1/forex/recent?codes=FRX.KRWUSD'
-exchange = requests.get(KRW_url, headers=user_agent).json()
-exchange_rate = exchange[0]['basePrice']
+
+
+KRW_url = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json'
+exchange = requests.get(KRW_url).json()
+exchange_rate = exchange['usd']['krw']
 
 Content = Embed(
     title='aws 요금',
