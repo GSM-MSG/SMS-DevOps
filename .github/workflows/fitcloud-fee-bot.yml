@@ -1,6 +1,7 @@
 name: fitcloud fee crawler
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '30 1 * * *'
 
